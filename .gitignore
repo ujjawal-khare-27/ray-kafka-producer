@@ -1,0 +1,5 @@
+.idea
+*pycache*
+*.pyc
+*.pyo
+venv*

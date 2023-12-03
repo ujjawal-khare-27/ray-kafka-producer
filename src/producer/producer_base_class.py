@@ -2,8 +2,6 @@ import json
 from typing import List
 
 from kafka import KafkaProducer
-import ray
-import pyarrow
 
 
 class ProducerBaseClass:

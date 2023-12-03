@@ -10,15 +10,19 @@ from src.producer_manager import KafkaProducerManager
 class TestProducerManager(unittest.TestCase):
     def setUp(self):
         self.KafkaProducerManager = KafkaProducerManager(
-            bootstrap_servers="localhost:9092", topic="test"
+            bootstrap_servers="localhost:9092", topic="test", batch_size=100
         )
 
         data = {}
-        for i in range(10000):
-            data[str(i)] = [i, i + 1, i + 2, i + 3, i + 4, i + 5, i + 6, i + 7]
+        for i in range(100):
+            temp = []
+            for j in range(10000):
+                temp.append(j)
+            data[str(i)] = temp
 
         pd_df = pd.DataFrame(data)
         self.ray_df = ray.data.from_pandas(pd_df)
+        print("len data", self.ray_df.count())
 
     def test_producer_manager_serial_producer(self):
         t1 = time.time()

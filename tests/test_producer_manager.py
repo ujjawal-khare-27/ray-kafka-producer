@@ -14,9 +14,9 @@ class TestProducerManager(unittest.TestCase):
         )
 
         data = {}
-        for i in range(1000):
+        for i in range(100):
             temp = []
-            for j in range(1000):
+            for j in range(10000):
                 temp.append(j)
             data[str(i)] = temp
 

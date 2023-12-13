@@ -3,11 +3,13 @@ from typing import List
 import ray
 
 from src.producer.producer_base_class import ProducerBaseClass
+import random
 
 
-@ray.remote
+@ray.remote(num_cpus=0.5)
 class ProducerActorClass(ProducerBaseClass):
     def __init__(self, bootstrap_servers: str, topic: str, **kwargs):
+        print("ProducerActorClass init", random.randint(1, 1000))
         super().__init__(bootstrap_servers, topic, **kwargs)
 
     def send_messages(self, messages: List[dict]):

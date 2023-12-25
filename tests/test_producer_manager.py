@@ -4,7 +4,7 @@ import unittest
 import ray
 import pandas as pd
 
-from src.producer_manager import KafkaProducerManager
+from ray_kafka_producer.producer_manager import KafkaProducerManager
 
 
 class TestProducerManager(unittest.TestCase):

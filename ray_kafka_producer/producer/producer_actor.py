@@ -2,7 +2,7 @@ from typing import List
 
 import ray
 
-from src.producer.producer_base_class import ProducerBaseClass
+from ray_kafka_producer.producer.producer_base_class import ProducerBaseClass
 import random
 
 

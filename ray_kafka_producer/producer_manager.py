@@ -1,8 +1,8 @@
 import ray
 from ray.data import Dataset
 
-from src.producer.producer import Producer
-from src.producer.producer_actor import ProducerActorClass
+from ray_kafka_producer.producer.producer import Producer
+from ray_kafka_producer.producer.producer_actor import ProducerActorClass
 
 
 class KafkaProducerManager:

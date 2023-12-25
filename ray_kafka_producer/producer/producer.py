@@ -1,6 +1,6 @@
 from typing import List
 
-from src.producer.producer_base_class import ProducerBaseClass
+from ray_kafka_producer.producer.producer_base_class import ProducerBaseClass
 from ray.data.block import Block
 from ray.types import ObjectRef
 

@@ -19,7 +19,7 @@ class TestProducerManager(unittest.TestCase):
             for j in range(5000):
                 temp.append(j)
             data[str(i)] = temp
-
+        ray.init(ignore_reinit_error=True)
         pd_df = pd.DataFrame(data)
         self.ray_df = ray.data.from_pandas(pd_df)
         print("len data", self.ray_df.count())
@@ -31,11 +31,14 @@ class TestProducerManager(unittest.TestCase):
         print(f"Time taken in test_producer_manager_serial_producer: {t2 - t1}")
 
     def test_producer_manager_actor_producer(self):
+        print("test_producer_manager_actor_producer resources", ray.available_resources())
         t1 = time.time()
         self.KafkaProducerManager.send_messages(self.ray_df, is_actor=True)
         t2 = time.time()
         print(f"Time taken in test_producer_manager_actor_producer: {t2 - t1}")
+        while True:
+            time.sleep(1)
 
     def tearDown(self):
         self.KafkaProducerManager.close()
-        ray.shutdown()
+        # ray.shutdown()

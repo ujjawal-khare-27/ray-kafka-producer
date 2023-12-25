@@ -21,7 +21,7 @@ def read_reqs(fname):
 
 all_reqs = read_reqs('requirements.txt')
 setup(
-    name='ray_kafka_proudcer',
+    name='ray_kafka_producer',
     version='0.0.1',
     description='Python SDK to produce Kafka messages to a Kafka cluster',
     long_description=readme,

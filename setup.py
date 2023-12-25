@@ -24,7 +24,7 @@ setup(
     name='ray_kafka_producer',
     version='0.0.1',
     description='Python SDK to produce Kafka messages to a Kafka cluster',
-    long_description=readme,
+    long_description="Python SDK to produce Kafka messages to a Kafka cluster",
     packages=find_packages(exclude=('tests', 'docs')),
     install_requires=all_reqs,
     include_package_data=True

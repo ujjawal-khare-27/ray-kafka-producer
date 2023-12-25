@@ -9,7 +9,7 @@ class KafkaProducerManager:
     def __init__(self, bootstrap_servers: str, topic: str, batch_size: int, **kwargs):
         self.bootstrap_servers = bootstrap_servers
         self.topic = topic
-        self.actor_pool_size = 6
+        self.actor_pool_size = 12
 
         self._producer_actors = [ProducerActorClass.remote(
                 bootstrap_servers=self.bootstrap_servers, topic=self.topic, **kwargs

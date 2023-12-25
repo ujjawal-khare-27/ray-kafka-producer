@@ -6,7 +6,7 @@ from ray_kafka_producer.producer.producer_base_class import ProducerBaseClass
 import random
 
 
-@ray.remote(num_cpus=1)
+@ray.remote(num_cpus=0.25)
 class ProducerActorClass(ProducerBaseClass):
     def __init__(self, bootstrap_servers: str, topic: str, **kwargs):
         self._id = random.randint(1, 1000)

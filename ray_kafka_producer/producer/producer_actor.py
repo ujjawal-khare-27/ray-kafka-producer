@@ -9,11 +9,13 @@ import random
 @ray.remote(num_cpus=0.5)
 class ProducerActorClass(ProducerBaseClass):
     def __init__(self, bootstrap_servers: str, topic: str, **kwargs):
-        print("ProducerActorClass init", random.randint(1, 1000))
+        self._id = random.randint(1, 1000)
+        print("ProducerActorClass init", self._id)
         super().__init__(bootstrap_servers, topic, **kwargs)
 
     def send_messages(self, messages: List[dict]):
         try:
+            print("id of actor", self._id)
             return super().send_messages(messages)
         except Exception as e:
             import traceback

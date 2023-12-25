@@ -3,8 +3,8 @@ import os
 import sys
 
 _here = os.path.abspath(os.path.dirname(__file__))
-with open('README.md') as f:
-    readme = f.read()
+# with open('README.md') as f:
+#     readme = f.read()
 
 python_2 = sys.version_info[0] == 2
 

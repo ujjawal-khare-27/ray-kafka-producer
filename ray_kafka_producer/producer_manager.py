@@ -58,14 +58,28 @@ class KafkaProducerManager:
 
             print("len(messages_batch)", len(messages_batch))
             if is_actor:
-                ray.get(
-                    [
-                        self._producer_actors[
-                            i % self.actor_pool_size
-                        ].send_messages.remote(messages)
-                        for i, messages in enumerate(messages_batch)
-                    ]
-                )
+                # Do ray.get in batches
+                for i in range(0, len(messages_batch), self.actor_pool_size):
+                    print("Sending messages", i)
+                    ray.get(
+                        [
+                            self._producer_actors[
+                                i % self.actor_pool_size
+                            ].send_messages.remote(messages)
+                            for i, messages in enumerate(messages_batch[i : i + self.actor_pool_size])
+                        ]
+                    )
+
+
+
+                # ray.get(
+                #     [
+                #         self._producer_actors[
+                #             i % self.actor_pool_size
+                #         ].send_messages.remote(messages)
+                #         for i, messages in enumerate(messages_batch)
+                #     ]
+                # )
                 print("Waiting for responses", len(responses), responses)
         except Exception as e:
             import traceback

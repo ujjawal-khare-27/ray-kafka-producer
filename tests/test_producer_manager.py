@@ -9,12 +9,12 @@ from ray_kafka_producer.producer_manager import KafkaProducerManager
 
 class TestProducerManager(unittest.TestCase):
     def setUp(self):
-
         self.KafkaProducerManager = KafkaProducerManager(
             bootstrap_servers="localhost:9092",
             topic="test",
             batch_size=100,
-            actor_pool_size=12
+            actor_pool_size=12,
+            num_cpu=0.25,
         )
 
         data = {}

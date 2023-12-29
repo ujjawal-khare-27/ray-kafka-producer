@@ -6,14 +6,25 @@ from ray_kafka_producer.producer.producer_actor import ProducerActorClass
 
 
 class KafkaProducerManager:
-    def __init__(self, bootstrap_servers: str, topic: str, batch_size: int, actor_pool_size: int, **kwargs):
+    def __init__(
+        self,
+        bootstrap_servers: str,
+        topic: str,
+        batch_size: int,
+        actor_pool_size: int,
+        num_cpu=0.25,
+        **kwargs
+    ):
         self.bootstrap_servers = bootstrap_servers
         self.topic = topic
         self.actor_pool_size = actor_pool_size
 
-        self._producer_actors = [ProducerActorClass.remote(
-            bootstrap_servers=self.bootstrap_servers, topic=self.topic, **kwargs
-        ) for i in range(self.actor_pool_size)]
+        self._producer_actors = [
+            ProducerActorClass.options(num_cpus=num_cpu).remote(
+                bootstrap_servers=self.bootstrap_servers, topic=self.topic, **kwargs
+            )
+            for i in range(self.actor_pool_size)
+        ]
 
         self.batch_size = batch_size
         self._producer = Producer(
@@ -48,11 +59,17 @@ class KafkaProducerManager:
             print("len(messages_batch)", len(messages_batch))
             if is_actor:
                 ray.get(
-                    [self._producer_actors[i % self.actor_pool_size].send_messages.remote(messages) for i, messages in
-                     enumerate(messages_batch)])
+                    [
+                        self._producer_actors[
+                            i % self.actor_pool_size
+                        ].send_messages.remote(messages)
+                        for i, messages in enumerate(messages_batch)
+                    ]
+                )
                 print("Waiting for responses", len(responses), responses)
         except Exception as e:
             import traceback
+
             traceback.print_exc()
             print("Exception occurred in send_messages in producer manager", e)
 

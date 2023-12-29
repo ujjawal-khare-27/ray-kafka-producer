@@ -19,6 +19,7 @@ class ProducerActorClass(ProducerBaseClass):
             return super().send_messages(messages)
         except Exception as e:
             import traceback
+
             traceback.print_exc()
             print("Exception", e)
 

@@ -10,7 +10,7 @@ python_2 = sys.version_info[0] == 2
 
 
 def read(fname):
-    with open(fname, 'rU' if python_2 else 'r') as fhandle:
+    with open(fname, "rU" if python_2 else "r") as fhandle:
         return fhandle.read()
 
 
@@ -19,13 +19,13 @@ def read_reqs(fname):
     return [req.strip() for req in read(req_path).splitlines() if req.strip()]
 
 
-all_reqs = read_reqs('requirements.txt')
+all_reqs = read_reqs("requirements.txt")
 setup(
-    name='ray_kafka_producer',
-    version='0.0.1',
-    description='Python SDK to produce Kafka messages to a Kafka cluster',
+    name="ray_kafka_producer",
+    version="0.0.1",
+    description="Python SDK to produce Kafka messages to a Kafka cluster",
     long_description="Python SDK to produce Kafka messages to a Kafka cluster",
-    packages=find_packages(exclude=('tests', 'docs')),
+    packages=find_packages(exclude=("tests", "docs")),
     install_requires=all_reqs,
-    include_package_data=True
+    include_package_data=True,
 )

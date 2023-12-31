@@ -16,15 +16,22 @@ pip3 install ray_kafka_producer@git+https://github.com/ujjawal-khare-27/ray-kafk
 
 ```python 
 from ray_kafka_producer.producer_manager import KafkaProducerManager
+```
 
+2. Create an instance of KafkaProducerManager
+```python
 # actor_pool_size is the number of actors that will be created to send data to Kafka
 # num_cpu is the number of CPUs that will be allocated to each actor
 kafka_producer_manager = KafkaProducerManager(bootstrap_servers="localhost:9092", topic="test", actor_pool_size=12,
             num_cpu=0.25)
+```
 
-# Insert data into Ray DataFrame 
+3. Send messages to Kafka (Ray DataFrame)
+```python
 kafka_producer_manager.flush_ray_df(df = ray_df, is_actor=True)
+```
 
-# Insert data into Pandas DataFrame
+4. Send messages to Kafka (Pandas DataFrame)
+```python
 kafka_producer_manager.flush_pandas_df(df = pandas_df)
 ```

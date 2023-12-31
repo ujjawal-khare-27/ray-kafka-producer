@@ -14,6 +14,7 @@ class TestProducerManager(unittest.TestCase):
             topic="test",
             batch_size=100,
             actor_pool_size=12,
+            flush_batch_size=100,
             num_cpu=0.25,
         )
 

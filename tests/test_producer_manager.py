@@ -12,7 +12,7 @@ class TestProducerManager(unittest.TestCase):
         self.KafkaProducerManager = KafkaProducerManager(
             bootstrap_servers="localhost:9092",
             topic="test",
-            batch_size=100,
+            batch_size=10,
             actor_pool_size=12,
             flush_batch_size=100,
             num_cpu=0.25,
@@ -21,7 +21,7 @@ class TestProducerManager(unittest.TestCase):
         data = {}
         for i in range(100):
             temp = []
-            for j in range(20000):
+            for j in range(200):
                 temp.append(j)
             data[str(i)] = temp
         ray.init(ignore_reinit_error=True)

@@ -13,9 +13,12 @@ class ProducerActorClass(ProducerBaseClass):
         print("ProducerActorClass init", self._id)
         super().__init__(bootstrap_servers, topic, **kwargs)
 
-    def send_messages(self, messages: List[dict]):
+    def send_messages(self, messages):
         try:
             print("id of actor", self._id)
+            print("messages df", messages)
+            messages = messages.to_dict(orient='list')
+            print("messages ->>>", messages)
             return super().send_messages(messages)
         except Exception as e:
             import traceback

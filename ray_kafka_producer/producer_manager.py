@@ -1,3 +1,5 @@
+import time
+
 import ray
 from ray.data import Dataset
 
@@ -7,14 +9,14 @@ from ray_kafka_producer.producer.producer_actor import ProducerActorClass
 
 class KafkaProducerManager:
     def __init__(
-        self,
-        bootstrap_servers: str,
-        topic: str,
-        batch_size: int,
-        actor_pool_size: int,
-        flush_batch_size: int,
-        num_cpu=0.25,
-        **kwargs
+            self,
+            bootstrap_servers: str,
+            topic: str,
+            batch_size: int,
+            actor_pool_size: int,
+            flush_batch_size: int,
+            num_cpu=0.25,
+            **kwargs
     ):
         self.bootstrap_servers = bootstrap_servers
         self.topic = topic
@@ -25,7 +27,7 @@ class KafkaProducerManager:
             ProducerActorClass.options(num_cpus=num_cpu).remote(
                 bootstrap_servers=self.bootstrap_servers, topic=self.topic, **kwargs
             )
-            for i in range(self.actor_pool_size)
+            for _ in range(self.actor_pool_size)
         ]
 
         self.batch_size = batch_size
@@ -35,30 +37,37 @@ class KafkaProducerManager:
 
     def send_messages(self, df: Dataset, is_actor=True):
         try:
+            t1 = time.time()
             responses = []
             rows = []
             i = 0
 
             messages_batch = []
 
-            def flush_to_kafka(messages, counter) -> int:
-                if is_actor:
-                    counter = counter % self.actor_pool_size
-                    messages_batch.append(messages)
-                else:
-                    resp = self._producer.send_messages(messages)
-                    responses.append(resp)
-                return counter + 1
+            # def flush_to_kafka(messages, counter) -> int:
+            #     if is_actor:
+            #         counter = counter % self.actor_pool_size
+            #         messages_batch.append(messages)
+            #     else:
+            #         resp = self._producer.send_messages(messages)
+            #         responses.append(resp)
+            #     return counter + 1
+            #
+            # for row in df.iter_rows():
+            #     rows.append(row)
+            #
+            #     if len(rows) == self.batch_size:
+            #         i = flush_to_kafka(rows, i)
+            #         rows = []
+            # i = flush_to_kafka(rows, i)
 
-            for row in df.iter_rows():
-                rows.append(row)
-
-                if len(rows) == self.batch_size:
-                    i = flush_to_kafka(rows, i)
-                    rows = []
-            i = flush_to_kafka(rows, i)
+            for batch in df.iter_batches(batch_size=self.batch_size, batch_format="pandas"):
+                print("batch", type(batch))
+                messages_batch.append(batch)
 
             print("len(messages_batch)", len(messages_batch))
+            t2 = time.time()
+            print(f"Time taken in iterating df 1: {t2 - t1}")
             if is_actor:
                 # Do ray.get in batches
                 for i in range(0, len(messages_batch), self.flush_batch_size):
@@ -67,11 +76,13 @@ class KafkaProducerManager:
                         [
                             self._producer_actors[
                                 i % self.actor_pool_size
-                            ].send_messages.remote(messages)
-                            for i, messages in enumerate(messages_batch[i : i + self.actor_pool_size])
+                                ].send_messages.remote(messages)
+                            for i, messages in enumerate(messages_batch[i: i + self.actor_pool_size])
                         ]
                     )
                 print("Waiting for responses", len(responses), responses)
+            t3 = time.time()
+            print(f"Time taken in iterating df 2: {t3 - t2}")
         except Exception as e:
             import traceback
 

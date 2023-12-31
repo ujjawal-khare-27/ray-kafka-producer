@@ -1,4 +1,4 @@
-A python ray Kafka producer for efficient data streaming to Kafka.
+A python Kafka producer for efficient data streaming to Kafka of ray dataframe and pandas dataframe.
 
 ```1. pip3 install ray_kafka_producer@git+https://github.com/ujjawal-khare-27/ray-kafka-producer@main --force-reinstall ```
 

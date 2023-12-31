@@ -1,5 +1,7 @@
 import json
+import time
 from typing import List
+import random
 
 from kafka import KafkaProducer
 
@@ -11,7 +13,10 @@ class ProducerBaseClass:
 
     def send_messages(self, messages: List[dict]):
         for message in messages:
-            self.producer.send(self.topic, json.dumps(message).encode("utf-8"))
+            self.send_message(message)
+
+    def send_message(self, message: dict):
+        self.producer.send(self.topic, json.dumps(message).encode("utf-8"))
 
     def close(self):
         self.producer.close()

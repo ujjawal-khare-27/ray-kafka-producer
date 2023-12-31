@@ -1,4 +1,4 @@
-# Ray Kafka Producer for Efficient Data Streaming to Kafka
+# Kafka Producer for Efficient Data Streaming to Kafka
 
 This Python Kafka producer facilitates high-performance data streaming from Ray DataFrame and Pandas DataFrame to Kafka. It is optimized to provide approximately 3-4x performance improvement compared to standard Kafka producers.
 

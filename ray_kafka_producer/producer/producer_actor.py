@@ -17,7 +17,6 @@ class ProducerActorClass(ProducerBaseClass):
 
     def send_messages(self, messages: Dataset):
         try:
-            print("id of actor", self._id)
             count = 0
             t1 = time.time()
             for row in messages.iter_rows():

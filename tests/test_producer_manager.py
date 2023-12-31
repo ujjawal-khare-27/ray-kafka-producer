@@ -30,13 +30,13 @@ class TestProducerManager(unittest.TestCase):
 
     def test_producer_manager_serial_producer(self):
         t1 = time.time()
-        self.KafkaProducerManager.send_messages(self.ray_df, is_actor=False)
+        self.KafkaProducerManager.flush_ray_df(self.ray_df, is_actor=False)
         t2 = time.time()
         print(f"Time taken in test_producer_manager_serial_producer: {t2 - t1}")
 
     def test_producer_manager_actor_producer(self):
         t1 = time.time()
-        self.KafkaProducerManager.send_messages(self.ray_df, is_actor=True)
+        self.KafkaProducerManager.flush_ray_df(self.ray_df, is_actor=True)
         t2 = time.time()
         print(f"Time taken in test_producer_manager_actor_producer: {t2 - t1}")
 

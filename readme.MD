@@ -4,6 +4,6 @@ A python ray Kafka producer for efficient data streaming to Kafka.
 
 ```2. kafkaProducerManager = KafkaProducerManager(bootstrap_servers="localhost:9092", topic="test", batch_size=100)```
 
-```3. kafkaProducerManager.send_messages(ray_df, is_actor=True)```
+```3. kafkaProducerManager.flush_ray_df(ray_df, is_actor=True)```
 
 ```4. For debugging purpose, use is_actor=False ```

@@ -1,5 +1,6 @@
 import time
 
+import pandas
 import ray
 from ray.data import Dataset
 
@@ -41,7 +42,7 @@ class KafkaProducerManager:
         proportions.append(1 - prop_sum - 0.00000000001)
         return proportions
 
-    def send_messages(self, df: Dataset, is_actor=True):
+    def _send_messages(self, df: Dataset, is_actor=True):
         try:
             if is_actor:
                 shards = df.split_proportionately(self.get_proportions())
@@ -55,6 +56,23 @@ class KafkaProducerManager:
             import traceback
             traceback.print_exc()
             print("Exception occurred in send_messages in producer manager", e)
+
+    def flush_pandas_df(self, df: pandas.DataFrame):
+        try:
+            ray_df = ray.data.from_pandas(df)
+            self._send_messages(ray_df, is_actor=True)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            print("Exception occurred in flush_pandas_df in producer manager", e)
+
+    def flush_ray_df(self, df: Dataset, is_actor=True):
+        try:
+            self._send_messages(df, is_actor=is_actor)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            print("Exception occurred in flush_ray_df in producer manager", e)
 
     def close(self):
         for actor in self._producer_actors:

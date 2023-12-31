@@ -48,10 +48,8 @@ class KafkaProducerManager:
                 shards = df.split_proportionately(self.get_proportions())
                 ray.get([actor.send_messages.remote(shard) for actor, shard in zip(self._producer_actors, shards)])
             else:
-                rows = []
                 for row in df.iter_rows():
-                    rows.append(row)
-                self._producer.send_messages(rows)
+                    self._producer.send_message(row)
         except Exception as e:
             import traceback
             traceback.print_exc()

@@ -1,6 +1,8 @@
+import time
 from typing import List
 
 import ray
+from ray.data import Dataset
 
 from ray_kafka_producer.producer.producer_base_class import ProducerBaseClass
 import random
@@ -13,13 +15,16 @@ class ProducerActorClass(ProducerBaseClass):
         print("ProducerActorClass init", self._id)
         super().__init__(bootstrap_servers, topic, **kwargs)
 
-    def send_messages(self, messages):
+    def send_messages(self, messages: Dataset):
         try:
             print("id of actor", self._id)
-            print("messages df", messages)
-            messages = messages.to_dict(orient='list')
-            print("messages ->>>", messages)
-            return super().send_messages(messages)
+            count = 0
+            t1 = time.time()
+            for row in messages.iter_rows():
+                super().send_message(row)
+                count += 1
+            t2 = time.time()
+            print(f"Time taken in sending messages in actor {self._id}: {t2 - t1} of length {count}")
         except Exception as e:
             import traceback
 

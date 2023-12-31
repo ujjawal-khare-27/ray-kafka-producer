@@ -12,9 +12,11 @@ class ProducerBaseClass:
         self.producer = KafkaProducer(bootstrap_servers=bootstrap_servers, **kwargs)
 
     def send_messages(self, messages: List[dict]):
-        # print("Sending messages", time.time(), len(messages), random.randint(1, 1000))
         for message in messages:
-            self.producer.send(self.topic, json.dumps(message).encode("utf-8"))
+            self.send_message(message)
+
+    def send_message(self, message: dict):
+        self.producer.send(self.topic, json.dumps(message).encode("utf-8"))
 
     def close(self):
         self.producer.close()

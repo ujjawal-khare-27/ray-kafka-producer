@@ -23,7 +23,9 @@ class ProducerActorClass(ProducerBaseClass):
                 super().send_message(row)
                 count += 1
             t2 = time.time()
-            print(f"Time taken in sending messages in actor {self._id}: {t2 - t1} of length {count}")
+            print(
+                f"Time taken in sending messages in actor {self._id}: {t2 - t1} of length {count}"
+            )
         except Exception as e:
             import traceback
 
